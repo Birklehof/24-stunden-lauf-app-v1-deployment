@@ -1,4 +1,4 @@
-# birklehof-24h-lauf-deployment
+# birklehof-24-stunden-lauf-deployment
 
 ## Prerequisites
 1. [Install Docker](https://docs.docker.com/engine/install/ubuntu/)
