@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 
 services:
   traefik:
-    container_name: b24hld-traefik-container
+    container_name: b24sl-traefik-container
     restart: always
     image: "traefik:v2.7"
     command:
@@ -24,10 +24,10 @@ services:
       # (Optional) Expose Dashboard
       # - "8080:8080"  # Don't do this in production!
     volumes:
-      - "traefik:/letsencrypt"
+      - "traefik-data:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
   database:
-    container_name: b24hld-database-container
+    container_name: b24sl-database-container
     restart: always
     image: postgres
     labels:
@@ -35,13 +35,13 @@ services:
       - "traefik.tcp.routers.database.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.database.entrypoints=database"
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - network
     volumes:
       - ./database-data:/var/lib/postgresql/data
   migrate-database:
-    container_name: b24hld-migrate-database-container
+    container_name: b24sl-migrate-database-container
     build:
       context: ./nextjs
       dockerfile: migrate-database.Dockerfile
@@ -52,7 +52,7 @@ services:
     depends_on:
       - database
   nextjs:
-    container_name: b24hld-nextjs-container
+    container_name: b24sl-nextjs-container
     restart: always
     build:
       context: ./nextjs
@@ -67,15 +67,13 @@ services:
       - network
     depends_on:
       - migrate-database
-    extra_hosts:
-      - "www.birklehof-24h-lauf.de:0.0.0.0" # Remove -> Either rent domain or make entry in local network -> Edit OAuth settings
 
 networks:
   network:
-    name: b24hld-network
+    name: b24sl-network
 
 volumes:
   database-data:
-    name: b24hld-database-data
-  traefik:
-    name: b24hld-traefik
+    name: b24sl-database-data
+  traefik-data:
+    name: b24sl-traefik

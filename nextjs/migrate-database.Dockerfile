@@ -5,12 +5,12 @@ FROM node:16 AS builder
 RUN apt-get -y update
 RUN apt-get -y install git
 
-WORKDIR /birklehof-24h-lauf
+WORKDIR /birklehof-24-stunden-lauf
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Download the code from github and copy the config file
 
-RUN git clone --depth=1 -b main https://github.com/C0mput3r5c13nt15t/birklehof-24h-lauf.git .
+RUN git clone --depth=1 -b main https://github.com/Birklehof/24-stunden-lauf.git .
 COPY .env.local .env.local
 
 RUN yarn install
